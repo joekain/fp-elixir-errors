@@ -8,13 +8,6 @@ defmodule HandlingErrorsWithoutExceptions.Mixfile do
      deps: deps]
   end
 
-  # Configuration for the OTP application
-  #
-  # Type `mix help compile.app` for more information
-  def application do
-    [applications: []]
-  end
-
   # Dependencies can be hex.pm packages:
   #
   #   {:mydep, "~> 0.3.0"}
