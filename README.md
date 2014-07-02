@@ -1,0 +1,4 @@
+HandlingErrorsWithoutExceptions
+===============================
+
+** TODO: Add description **
