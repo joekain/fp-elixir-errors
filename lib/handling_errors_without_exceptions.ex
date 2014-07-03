@@ -23,7 +23,14 @@ defmodule HandlingErrorsWithoutExceptions do
   # {:ok, {:ok, value}} only to have the outer tuple stripped by get_or_else.
   def or_else(v, ob), do: map(v, fn (any) -> some(any) end) |> get_or_else(ob)
 
+  # This was my original solution
+  # def filter(v, f) do
+  #   if map(v, f) |> get_or_else(false), do: v, else: none
+  # end
+
+  # Based on the solutions from the text I can move the evaluation into
+  # the flat_map to avoid calling get_or_else.
   def filter(v, f) do
-    if map(v, f) |> get_or_else(false), do: v, else: none
+    flat_map(v, fn (x) -> if f.(x), do: some(x), else: none end)
   end
 end
