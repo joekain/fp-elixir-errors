@@ -10,5 +10,10 @@ defmodule HandlingErrorsWithoutExceptions do
   def some(value), do: {:ok, value}
   def none(), do: {:error}
 
-  def map({:ok, value}, f), do: f.(value)
+  def map({:ok, value}, f), do: some(f.(value))
+  def map({:error}, f), do: none()
+
+  def flat_map({:error}, _f), do: none()
+  def flat_map({:ok, value}, f), do: f.(value)
+
 end
