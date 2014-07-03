@@ -12,7 +12,7 @@ defmodule HandlingErrorsWithoutExceptions do
 
   # Exercise 1: map, flat_map, get_or_else, or_else, filter
   def map({:ok, value}, f), do: some(f.(value))
-  def map({:error}, f), do: none()
+  def map({:error}, _f), do: none()
 
   def flat_map({:error}, _f), do: none()
   def flat_map({:ok, value}, f), do: f.(value)
