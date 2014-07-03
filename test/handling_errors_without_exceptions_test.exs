@@ -26,4 +26,12 @@ defmodule HandlingErrorsWithoutExceptionsTest do
     end
     assert Sut.flat_map(Sut.some(false), failing_function) == Sut.none
   end
+
+  test "get_or_else with ok value" do
+    assert Sut.get_or_else(Sut.some(2), 3) == 2
+  end
+
+  test "get_or_else with error value" do
+    assert Sut.get_or_else(Sut.none, 3) == 3
+  end
 end

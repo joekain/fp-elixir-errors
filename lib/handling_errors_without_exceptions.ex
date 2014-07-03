@@ -16,4 +16,6 @@ defmodule HandlingErrorsWithoutExceptions do
   def flat_map({:error}, _f), do: none()
   def flat_map({:ok, value}, f), do: f.(value)
 
+  def get_or_else({:error}, default), do: default
+  def get_or_else({:ok, value}, _default), do: value
 end
