@@ -43,4 +43,27 @@ defmodule HandlingErrorsWithoutExceptionsTest do
     assert Sut.or_else(Sut.none, Sut.some(3)) == Sut.some(3)
   end
 
+  test "filter with ok value matching filter" do
+    assert Sut.filter(Sut.some(3), fn
+        (3) -> true
+        (_) -> false
+      end
+    ) == Sut.some(3)
+  end
+
+  test "filter with ok value not matching filter" do
+    assert Sut.filter(Sut.some(2), fn
+        (3) -> true
+        (_) -> false
+      end
+    ) == Sut.none
+  end
+
+  test "filter with error value" do
+    assert Sut.filter(Sut.none, fn
+        (3) -> true
+        (_) -> false
+      end
+    ) == Sut.none
+  end
 end
