@@ -10,6 +10,7 @@ defmodule HandlingErrorsWithoutExceptions do
   def some(value), do: {:ok, value}
   def none(), do: {:error}
 
+  # Exercise 1: map, flat_map, get_or_else, or_else, filter
   def map({:ok, value}, f), do: some(f.(value))
   def map({:error}, f), do: none()
 
@@ -27,10 +28,23 @@ defmodule HandlingErrorsWithoutExceptions do
   # def filter(v, f) do
   #   if map(v, f) |> get_or_else(false), do: v, else: none
   # end
-
+  #
   # Based on the solutions from the text I can move the evaluation into
   # the flat_map to avoid calling get_or_else.
   def filter(v, f) do
     flat_map(v, fn (x) -> if f.(x), do: some(x), else: none end)
+  end
+
+
+  # Exercise 2
+
+  # Adapted from the example in the text
+  def mean([]), do: none
+  def mean(xs), do: some(Enum.sum(xs) / Enum.count(xs))
+
+  def variance(xs) do
+    mean(xs)
+      |> map(fn (m) -> Enum.map(xs, &(:math.pow(&1 - m, 2))) end)
+      |> flat_map(fn (seq) -> mean(seq) end)
   end
 end

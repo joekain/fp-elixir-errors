@@ -66,4 +66,12 @@ defmodule HandlingErrorsWithoutExceptionsTest do
       end
     ) == Sut.none
   end
+
+  test "variance of an empty sequence" do
+    assert Sut.variance([]) == Sut.none
+  end
+
+  test "variance of a non-empty sequence" do
+    assert Sut.variance([1, 2, 3]) == Sut.some(2.0 / 3.0)
+  end
 end
