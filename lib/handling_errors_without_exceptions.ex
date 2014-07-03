@@ -21,7 +21,7 @@ defmodule HandlingErrorsWithoutExceptions do
 
   # Is this the best solution?  I don't like that the map produces
   # {:ok, {:ok, value}} only to have the outer tuple stripped by get_or_else.
-  def or_else(v, ob), do: get_or_else(map(v, fn (any) -> some(any) end), ob)
+  def or_else(v, ob), do: map(v, fn (any) -> some(any) end) |> get_or_else(ob)
 
   def filter(v, f) do
     if map(v, f) |> get_or_else(false), do: v, else: none
