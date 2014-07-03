@@ -18,4 +18,8 @@ defmodule HandlingErrorsWithoutExceptions do
 
   def get_or_else({:error}, default), do: default
   def get_or_else({:ok, value}, _default), do: value
+
+  # Is this the best solution?  I don't like that the map produces
+  # {:ok, {:ok, value}} only to have the outer tuple stripped by get_or_else.
+  def or_else(v, ob), do: get_or_else(map(v, fn (any) -> some(any) end), ob)
 end

@@ -34,4 +34,13 @@ defmodule HandlingErrorsWithoutExceptionsTest do
   test "get_or_else with error value" do
     assert Sut.get_or_else(Sut.none, 3) == 3
   end
+
+  test "or_else with ok value" do
+    assert Sut.or_else(Sut.some(2), Sut.some(3)) == Sut.some(2)
+  end
+
+  test "or_else with error value" do
+    assert Sut.or_else(Sut.none, Sut.some(3)) == Sut.some(3)
+  end
+
 end
