@@ -74,4 +74,17 @@ defmodule HandlingErrorsWithoutExceptionsTest do
   test "variance of a non-empty sequence" do
     assert Sut.variance([1, 2, 3]) == Sut.some(2.0 / 3.0)
   end
+
+  test "map2 with two ok values" do
+    assert Sut.map2( Sut.some(2), Sut.some(3), &(&1 + &2)) == Sut.some(5)
+  end
+
+  test "map2 with ok and error values" do
+    assert Sut.map2( Sut.some(2), Sut.none, &(&1 + &2)) == Sut.none
+  end
+
+  test "map2 with error and ok values" do
+    assert Sut.map2( Sut.none, Sut.some(3), &(&1 + &2)) == Sut.none
+  end
+
 end

@@ -47,4 +47,19 @@ defmodule HandlingErrorsWithoutExceptions do
       |> map(fn (m) -> Enum.map(xs, &(:math.pow(&1 - m, 2))) end)
       |> flat_map(fn (seq) -> mean(seq) end)
   end
+
+
+  # Exercise 3
+
+  # My first attempt, using pattern matching
+  # def map2({:error}, _b, _f), do: none
+  # def map2(_a, {:error}, _f), do: none
+  # def map2({:ok, a}, {:ok, b}, f), do: some(f.(a, b))
+
+  # Adapted from the book's solution
+  def map2(a, b, f), do: flat_map(a,
+    fn (aa) ->
+      map(b, fn (bb) -> f.(aa, bb) end)
+    end
+  )
 end
