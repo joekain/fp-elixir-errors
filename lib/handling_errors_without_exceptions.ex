@@ -120,5 +120,14 @@ defmodule HandlingErrorsWithoutExceptions do
         map(b, fn (bb) -> f.(aa, bb) end)
       end
     )
+
+
+    # Exercise 7 - These are identical to the Option versions
+    def traverse(l, f), do: List.foldr(l, some([]), fn (x, acc) ->
+        map2(f.(x), acc, fn (h, t) -> [h | t] end)
+      end
+    )
+
+    def sequence(l), do: traverse(l, fn (x) -> x end)
   end
 end

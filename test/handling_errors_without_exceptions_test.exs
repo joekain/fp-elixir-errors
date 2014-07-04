@@ -188,4 +188,40 @@ defmodule HandlingErrorsWithoutExceptionsTest do
   test "Either: map2 with two errors" do
     assert Sut.map2(Sut.none("Reason 1"), Sut.none("Reason 2"), &(&1 + &2)) == Sut.none("Reason 1")
   end
+
+  def parse_int_with_reason(s) do
+    try do
+      {:ok, String.to_integer(s)}
+    catch
+      :error, :badarg -> {:error, "#{s} is not an integer"}
+    end
+  end
+
+  test "Either: traverse list of values that will succeed" do
+    list = ["1", "2", "3"]
+    assert Sut.traverse(list, &(parse_int_with_reason(&1))) == Sut.some([1, 2, 3])
+  end
+
+  test "Either: traverse list containing one value that will fail" do
+    list = ["1", "a", "3"]
+    assert Sut.traverse(list, &(parse_int_with_reason(&1))) == Sut.none("a is not an integer")
+  end
+
+  test "Either: traverse empty list" do
+    assert Sut.traverse([], &(parse_int_with_reason(&1))) == Sut.some([])
+  end
+
+  test "Either: sequence via traverse of list of ok values" do
+    list = [Sut.some(1), Sut.some(2), Sut.some(3)]
+    assert Sut.sequence(list) == Sut.some([1,2,3])
+  end
+
+  test "Either: sequence via traverse of list with one error value" do
+    list = [Sut.some(1), Sut.none("A reason"), Sut.some(3)]
+    assert Sut.sequence(list) == Sut.none("A reason")
+  end
+
+  test "Either: sequence via traverse of empty list" do
+    assert Sut.sequence([]) == Sut.some([])
+  end
 end
