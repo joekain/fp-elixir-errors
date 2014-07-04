@@ -87,4 +87,18 @@ defmodule HandlingErrorsWithoutExceptionsTest do
     assert Sut.map2( Sut.none, Sut.some(3), &(&1 + &2)) == Sut.none
   end
 
+  test "sequence of list of ok values" do
+    list = [Sut.some(1), Sut.some(2), Sut.some(3)]
+    assert Sut.sequence(list) == Sut.some([1,2,3])
+  end
+
+  test "sequence of list with one error value" do
+    list = [Sut.some(1), Sut.none, Sut.some(3)]
+    assert Sut.sequence(list) == Sut.none
+  end
+
+  test "sequence of empty list" do
+    assert Sut.sequence([]) == Sut.some([])
+  end
+
 end

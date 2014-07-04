@@ -62,4 +62,17 @@ defmodule HandlingErrorsWithoutExceptions do
       map(b, fn (bb) -> f.(aa, bb) end)
     end
   )
+
+  # Exercise 4
+  # My first attempt used pattern matching but I wanted to rewrite using fold.
+  # The text does not reuse map2 but instead seems to reimplement it.
+  #
+  # def sequence([]), do: some([])
+  # def sequence([h | t]), do: map2(h, sequence(t), fn (a, b) -> [a | b] end)
+
+  # A second implementation using List.foldr/3, this does the same thing
+  def sequence(l), do: List.foldr(l, some([]), fn (x, acc) ->
+      map2(x, acc, fn (h, t) -> [h | t] end)
+    end
+  )
 end
