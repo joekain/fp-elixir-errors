@@ -95,4 +95,30 @@ defmodule HandlingErrorsWithoutExceptions do
   )
 
   def sequence_via_traverse(l), do: traverse(l, fn (x) -> x end)
+
+
+  defmodule Either do
+    def some(value), do: {:ok, value}
+    def none(reason), do: {:error, reason}
+
+    # Exercise 6
+    def map({:ok, value}, f), do: some(f.(value))
+    def map({:error, reason}, _f), do: none(reason)
+
+    def flat_map({:error, reason}, _f), do: none(reason)
+    def flat_map({:ok, value}, f), do: f.(value)
+
+    def get_or_else({:error, _reason}, default), do: default
+    def get_or_else({:ok, value}, _default), do: value
+
+    # Is this the best solution?  I don't like that the map produces
+    # {:ok, {:ok, value}} only to have the outer tuple stripped by get_or_else.
+    def or_else(v, ob), do: map(v, fn (any) -> some(any) end) |> get_or_else(ob)
+
+    def map2(a, b, f), do: flat_map(a,
+      fn (aa) ->
+        map(b, fn (bb) -> f.(aa, bb) end)
+      end
+    )
+  end
 end

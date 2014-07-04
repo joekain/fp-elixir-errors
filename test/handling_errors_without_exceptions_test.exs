@@ -136,4 +136,56 @@ defmodule HandlingErrorsWithoutExceptionsTest do
   test "sequence via traverse of empty list" do
     assert Sut.sequence_via_traverse([]) == Sut.some([])
   end
+
+
+  alias HandlingErrorsWithoutExceptions.Either, as: Sut
+
+
+  test "Either: map ok value" do
+    assert Sut.map(Sut.some(2), &(&1 + 2)) == Sut.some(4)
+  end
+
+  test "Either: map error value" do
+    assert Sut.map(Sut.none("Some reason"), &(&1 + 2)) == Sut.none("Some reason")
+  end
+
+  test "Either: flat_map ok value" do
+    assert Sut.flat_map(Sut.some(2), &(Sut.some(&1 + 2))) == Sut.some(4)
+  end
+
+  test "Either: flat_map on error value" do
+    assert Sut.flat_map(Sut.none("Some reason"), &(Sut.some(&1 + 2))) == Sut.none("Some reason")
+  end
+
+  test "Either: flat_map with failing function" do
+    failing_function = fn
+      (true)  -> Sut.some(1)
+      (false) -> Sut.none("Some reason")
+    end
+    assert Sut.flat_map(Sut.some(false), failing_function) == Sut.none("Some reason")
+  end
+
+  test "Either: or_else with ok value" do
+    assert Sut.or_else(Sut.some(2), Sut.some(3)) == Sut.some(2)
+  end
+
+  test "Either: or_else with error value" do
+    assert Sut.or_else(Sut.none("Some reason"), Sut.some(3)) == Sut.some(3)
+  end
+
+  test "Either: map2 with two ok values" do
+    assert Sut.map2(Sut.some(2), Sut.some(3), &(&1 + &2)) == Sut.some(5)
+  end
+
+  test "Either: map2 with ok and error values" do
+    assert Sut.map2(Sut.some(2), Sut.none("A reason"), &(&1 + &2)) == Sut.none("A reason")
+  end
+
+  test "Either: map2 with error and ok values" do
+    assert Sut.map2(Sut.none("A reason"), Sut.some(3), &(&1 + &2)) == Sut.none("A reason")
+  end
+
+  test "Either: map2 with two errors" do
+    assert Sut.map2(Sut.none("Reason 1"), Sut.none("Reason 2"), &(&1 + &2)) == Sut.none("Reason 1")
+  end
 end
