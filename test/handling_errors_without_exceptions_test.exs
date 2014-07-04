@@ -101,4 +101,26 @@ defmodule HandlingErrorsWithoutExceptionsTest do
     assert Sut.sequence([]) == Sut.some([])
   end
 
+  def parse_int(s) do
+    try do
+      {:ok, String.to_integer(s)}
+    catch
+      :error, :badarg -> {:error}
+    end
+  end
+
+  test "traverse list of values that will succeed" do
+    list = ["1", "2", "3"]
+    assert Sut.traverse(list, &(parse_int(&1))) == Sut.some([1, 2, 3])
+  end
+
+  test "traverse list containing one value that will fail" do
+    list = ["1", "a", "3"]
+    assert Sut.traverse(list, &(parse_int(&1))) == Sut.none
+  end
+
+  test "traverse empty list" do
+    assert Sut.traverse([], &(parse_int(&1))) == Sut.some([])
+  end
+
 end

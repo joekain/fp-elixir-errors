@@ -75,4 +75,22 @@ defmodule HandlingErrorsWithoutExceptions do
       map2(x, acc, fn (h, t) -> [h | t] end)
     end
   )
+
+
+  # Exercise 5
+
+  # This is my adaptation of the initial implementation described by the text.
+  # I used this version to verify my tests were correct.  This implementation
+  # is inefficient so the exercise is to implement a more efficient, single pass
+  # version.
+  #
+  # def traverse(l, f), do: Enum.map(l, f) |> sequence
+
+  # Perform one fold over the list.  This is basically the same code as
+  # sequence from Exercise 4 with the addition that I apply the function
+  # f to x instead of just using x.
+  def traverse(l, f), do: List.foldr(l, some([]), fn (x, acc) ->
+      map2(f.(x), acc, fn (h, t) -> [h | t] end)
+    end
+  )
 end
