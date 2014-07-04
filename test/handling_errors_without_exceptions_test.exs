@@ -123,4 +123,17 @@ defmodule HandlingErrorsWithoutExceptionsTest do
     assert Sut.traverse([], &(parse_int(&1))) == Sut.some([])
   end
 
+  test "sequence via traverse of list of ok values" do
+    list = [Sut.some(1), Sut.some(2), Sut.some(3)]
+    assert Sut.sequence_via_traverse(list) == Sut.some([1,2,3])
+  end
+
+  test "sequence via traverse of list with one error value" do
+    list = [Sut.some(1), Sut.none, Sut.some(3)]
+    assert Sut.sequence_via_traverse(list) == Sut.none
+  end
+
+  test "sequence via traverse of empty list" do
+    assert Sut.sequence_via_traverse([]) == Sut.some([])
+  end
 end

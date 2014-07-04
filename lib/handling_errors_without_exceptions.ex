@@ -93,4 +93,6 @@ defmodule HandlingErrorsWithoutExceptions do
       map2(f.(x), acc, fn (h, t) -> [h | t] end)
     end
   )
+
+  def sequence_via_traverse(l), do: traverse(l, fn (x) -> x end)
 end
