@@ -105,7 +105,7 @@ defmodule HandlingErrorsWithoutExceptionsTest do
     try do
       {:ok, String.to_integer(s)}
     catch
-      :error, :badarg -> {:error}
+      :error, :badarg -> :error
     end
   end
 

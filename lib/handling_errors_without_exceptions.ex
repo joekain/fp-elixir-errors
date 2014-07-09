@@ -8,16 +8,16 @@ defmodule HandlingErrorsWithoutExceptions do
   # produces the tuples directly but the some / none vocabulary
   # gives consistency with the text.
   def some(value), do: {:ok, value}
-  def none(), do: {:error}
+  def none(), do: :error
 
   # Exercise 1: map, flat_map, get_or_else, or_else, filter
   def map({:ok, value}, f), do: some(f.(value))
-  def map({:error}, _f), do: none()
+  def map(:error, _f), do: none()
 
-  def flat_map({:error}, _f), do: none()
+  def flat_map(:error, _f), do: none()
   def flat_map({:ok, value}, f), do: f.(value)
 
-  def get_or_else({:error}, default), do: default
+  def get_or_else(:error, default), do: default
   def get_or_else({:ok, value}, _default), do: value
 
   # Is this the best solution?  I don't like that the map produces
@@ -52,8 +52,8 @@ defmodule HandlingErrorsWithoutExceptions do
   # Exercise 3
 
   # My first attempt, using pattern matching
-  # def map2({:error}, _b, _f), do: none
-  # def map2(_a, {:error}, _f), do: none
+  # def map2(:error, _b, _f), do: none
+  # def map2(_a, :error, _f), do: none
   # def map2({:ok, a}, {:ok, b}, f), do: some(f.(a, b))
 
   # Adapted from the book's solution
